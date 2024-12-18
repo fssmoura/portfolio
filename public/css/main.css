@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
 
 :root {
-    --accent: #fafafa;
-    --background: #101010;
+    --accent: 250, 250, 250;
+    --background: 16, 16, 16;
 }
 
 * {
@@ -20,6 +20,6 @@ body {
     font-optical-sizing: auto;
     display: flex;
     flex-direction: column;
-    background-color: var(--background);
-    color: var(--accent);
+    background-color: rgb(var(--background));
+    color: rgb(var(--accent));
 }

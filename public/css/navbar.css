@@ -1,0 +1,52 @@
+.navbar {
+    z-index: 10;
+    width: 100vw;
+    height: fit-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 2.5rem;
+    gap: 0.7rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-container {
+    flex: 1;
+    display: flex;
+    align-content: center;
+}
+
+.navbar-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.navbar-logo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.navbar-logo-name {
+    color: rgb(var(--accent));
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.navbar-logo-title {
+    color: rgba(var(--accent), 0.5);
+    font-size: 0.7em;
+}
+
+.navbar-center {
+    gap: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.5rem;
+}
