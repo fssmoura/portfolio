@@ -70,3 +70,10 @@ node_modules/
 
 README.md
 
+# Firebase related files
+.firebase/
+firebase-debug.log
+firebase.json
+firestore.indexes.json
+firestore.rules
+storage.rules
