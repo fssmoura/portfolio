@@ -7,6 +7,8 @@
   <title>Francisco Moura — Portfolio</title>
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/projects.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
 
 <body>
@@ -19,6 +21,14 @@
     </div>
     <div class="navbar-container navbar-center"></div>
     <div class="navbar-container navbar-right"></div>
+  </div>
+  <div class="projects"></div>
+  <div class="footer"></div>
+
+  <script type="module">
+    import { initWork } from '/js/projectShowcase.js';
+    initWork();
+  </script>
 </body>
 
 </html>
