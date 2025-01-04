@@ -1,12 +1,10 @@
 .navbar {
-    position: fixed;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     width: 100vw;
     height: fit-content;
     padding: 2rem 2.5rem;
-    gap: 0.7rem;
     transition: all 0.3s ease;
     z-index: 10;
 }
@@ -14,7 +12,8 @@
 .navbar-container {
     flex: 1;
     display: flex;
-    align-content: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgb(var(--border));
 }
 
 .navbar-left {
@@ -23,20 +22,7 @@
 }
 
 .navbar-logo {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-}
-
-.navbar-logo-name {
-    color: rgb(var(--accent));
-    font-size: 1.1em;
-    font-weight: 600;
-}
-
-.navbar-logo-title {
-    color: rgba(var(--accent), 0.5);
-    font-size: 0.7em;
+    font-weight: 300;
 }
 
 .navbar-center {
@@ -50,4 +36,22 @@
     justify-content: flex-end;
     align-items: center;
     gap: 1.5rem;
+}
+
+.navbar-theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    border: 1px solid rgb(var(--border));
+    background: rgb(var(--background));
+    color: rgb(var(--accent));
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.navbar-theme-toggle:hover {
+    background: rgb(var(--accent));
+    color: rgb(var(--background));
 }
