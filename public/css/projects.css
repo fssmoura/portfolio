@@ -26,7 +26,7 @@
 .project-info-line {
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
+    gap: 0.2rem;
 }
 
 .project-title {
@@ -37,6 +37,7 @@
 .project-subtitle {
     color: rgba(var(--accent), 0.5);
     font-size: 0.9em;
+    font-weight: 200;
 }
 
 .project-info-line.right {
