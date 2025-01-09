@@ -50,3 +50,35 @@ h6 {
     font-style: normal;
     font-weight: 800;
 }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    width: 100vw;
+    height: fit-content;
+    padding: 0 2.5rem 1rem;
+}
+
+.footer-container {
+    display: flex;
+    padding: 1rem 0;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+    border-top: 1px solid rgb(var(--border));
+}
+
+.footer-label {
+    font-weight: 300;
+}
+
+.footer-label.top {
+    font-size: 0.8em;
+    color: rgba(var(--accent), 0.5);
+}
+
+.footer-label.bottom {
+    font-size: 0.9em;
+    color: rgb(var(--accent));
+}
