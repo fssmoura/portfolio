@@ -1,4 +1,4 @@
-.projects {
+.showcase {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     width: 100vw;
@@ -9,14 +9,14 @@
     justify-content: start;
 }
 
-.project-item {
+.showcase-project-item {
     height: fit-content;
     width: 100%;
     border-top: 1px solid rgb(var(--border));
     cursor: pointer;
 }
 
-.project-info {
+.showcase-project-info {
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
@@ -26,27 +26,27 @@
     font-weight: 300;
 }
 
-.project-info-line {
+.showcase-project-info-line {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
 }
 
-.project-title {
+.showcase-project-title {
     color: rgb(var(--accent));
     font-weight: 400;
     font-size: 0.9em;
 }
 
-.project-info-line.right {
+.showcase-project-info-line.right {
     align-items: flex-end;
 }
 
-.project-id {
+.showcase-project-id {
     font-size: 0.9em;
 }
 
-.project-thumbnail {
+.showcase-project-thumbnail {
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -59,11 +59,11 @@
     overflow: hidden;
 }
 
-.project-thumbnail:hover {
+.showcase-project-thumbnail:hover {
     background: rgb(var(--highlight));
 }
 
-.project-thumbnail img {
+.showcase-project-thumbnail img {
     width: 80%;
     height: auto;
     transform: translateY(5%);

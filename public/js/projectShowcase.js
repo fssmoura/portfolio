@@ -1,8 +1,8 @@
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { db } from '../js/firebase.js';
 
-export async function initWork() {
-    const projectsContainer = document.querySelector('.projects');
+export async function initShowcaseDisplay() {
+    const projectsContainer = document.querySelector('.showcase');
 
     try {
         const querySnapshot = await getDocs(collection(db, "projects"));
@@ -29,29 +29,29 @@ export async function initWork() {
                 // Calculate ID starting from the end
                 // If array.length is 8, then for index 0 we get ID "08", for the last index we get "01"
                 const sequentialId = String(array.length - index).padStart(2, '0');
-                const projectElement = createProject(project.data, sequentialId);
+                const projectElement = createProjectItem(project.data, sequentialId);
                 projectsContainer.appendChild(projectElement);
             });
     } catch (error) {
         console.error("Error fetching projects:", error);
     }
 }
-function createProject(project, sequentialId) {
+function createProjectItem(project, sequentialId) {
     const projectItem = document.createElement('div');
-    projectItem.className = 'project-item';
+    projectItem.className = 'showcase-project-item';
 
     projectItem.innerHTML = `
-        <div class="project-info">
-            <div class="project-info-line left">
-                <span class="project-title">${project.name}</span>
-                <span class="project-subtitle">${project.owner} — ${project.year}</span>
+        <div class="showcase-project-info">
+            <div class="showcase-project-info-line left">
+                <span class="showcase-project-title">${project.name}</span>
+                <span class="showcase-project-subtitle">${project.owner} — ${project.year}</span>
             </div>
-            <div class="project-info-line right">
-                <span class="project-id">${sequentialId}</span>
-                <span class="project-type">${project.type}</span>
+            <div class="showcase-project-info-line right">
+                <span class="showcase-project-id">${sequentialId}</span>
+                <span class="showcase-project-type">${project.type}</span>
             </div>
         </div>
-         <div class="project-thumbnail">
+         <div class="showcase-project-thumbnail">
             <img src="${project.thumbnail}" alt="${project.name}">
         </div>
     `;
