@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/header.css">
-  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/project.css">
 </head>
 
 <body>
@@ -20,7 +20,8 @@
       <div class="navbar-container navbar-left">
         <a href="/" class="navbar-page-link">
           <span class="navbar-active-icon"></span>
-          <span class="navbar-page active">my work</span>
+          <div><span class="navbar-page">my work /</span><span class="navbar-page navbar-project active"> project
+            </span></div>
         </a>
         <a href="/info" class="navbar-page-link">
           <span class="navbar-page">about me</span>
@@ -46,13 +47,7 @@
       </div>
     </div>
   </div>
-  <div class="projects"></div>
   <div class="footer"></div>
-
-  <script type="module">
-    import { initWork } from '/js/projectShowcase.js';
-    initWork();
-  </script>
 
   <script src="js/theme.js"></script>
 

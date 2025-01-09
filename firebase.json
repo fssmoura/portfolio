@@ -9,6 +9,24 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/info",
+        "destination": "/info.html"
+      },
+      {
+        "source": "/project",
+        "destination": "/project.html"
+      },
+      {
+        "source": "**",
+        "destination": "/404.html"
+      }
     ]
   },
   "storage": {
