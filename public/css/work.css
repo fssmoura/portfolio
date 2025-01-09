@@ -64,8 +64,9 @@
 }
 
 .project-thumbnail img {
-    width: 75%;
+    width: 80%;
     height: auto;
+    transform: translateY(5%);
     object-fit: cover;
     display: block;
 }
