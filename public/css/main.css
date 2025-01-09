@@ -37,7 +37,6 @@ body {
     flex-direction: column;
     background-color: rgb(var(--background));
     color: rgb(var(--accent));
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1,
