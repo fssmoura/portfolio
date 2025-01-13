@@ -36,6 +36,7 @@ export async function initShowcaseDisplay() {
         console.error("Error fetching projects:", error);
     }
 }
+
 function createProjectItem(project, sequentialId) {
     const projectItem = document.createElement('div');
     projectItem.className = 'showcase-project-item';
@@ -44,7 +45,7 @@ function createProjectItem(project, sequentialId) {
         <div class="showcase-project-info">
             <div class="showcase-project-info-line left">
                 <span class="showcase-project-title">${project.name}</span>
-                <span class="showcase-project-subtitle">${project.owner} — ${project.year}</span>
+                <span class="showcase-project-subtitle">${formatSubtitle(project.owner, project.year)}</span>
             </div>
             <div class="showcase-project-info-line right">
                 <span class="showcase-project-id">${sequentialId}</span>
@@ -57,4 +58,16 @@ function createProjectItem(project, sequentialId) {
     `;
 
     return projectItem;
+}
+
+// Helper function
+function formatSubtitle(owner, year) {
+    if (owner && year) {
+        return `${owner} — ${year}`;
+    } else if (owner) {
+        return owner;
+    } else if (year) {
+        return year;
+    }
+    return '';
 }
