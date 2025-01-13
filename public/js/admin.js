@@ -5,6 +5,8 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gsta
 
 // Constants
 const ADMIN_EMAIL = 'fssmoura.fm@gmail.com';
+let selectedTools = [];
+let toolsPool = new Set();
 
 // DOM Elements
 const loginForm = document.getElementById('loginForm');
@@ -34,6 +36,7 @@ onAuthStateChanged(auth, (user) => {
         loginForm.classList.add('d-none');
         adminDashboard.classList.remove('d-none');
         loadProjects();
+        loadToolsPool();
     } else {
         if (user && user.email !== ADMIN_EMAIL) {
             alert('Unauthorized access. Only admin can access this page.');
@@ -69,6 +72,44 @@ async function loadProjects() {
     }
 }
 
+async function loadToolsPool() {
+    const querySnapshot = await getDocs(collection(db, "projects"));
+    querySnapshot.forEach((doc) => {
+        const project = doc.data();
+        if (project.tools) {
+            project.tools.forEach(tool => toolsPool.add(tool));
+        }
+    });
+    updateToolsList();
+}
+
+function updateToolsList() {
+    const datalist = document.getElementById('toolsList');
+    datalist.innerHTML = Array.from(toolsPool)
+        .sort((a, b) => a.localeCompare(b)) // Sort alphabetically
+        .map(tool => `<option value="${tool}">`)
+        .join('');
+}
+
+function updateToolTags() {
+    const tagsContainer = document.getElementById('toolTags');
+    tagsContainer.innerHTML = selectedTools
+        .map(tool => `
+            <span class="tool-tag">
+                ${tool}
+                <button type="button" class="remove-tool" data-tool="${tool}">&times;</button>
+            </span>
+        `).join('');
+}
+
+document.getElementById('toolTags').addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-tool')) {
+        const tool = e.target.dataset.tool;
+        selectedTools = selectedTools.filter(t => t !== tool);
+        updateToolTags();
+    }
+});
+
 async function loadProjectData(id) {
     try {
         const docSnap = await getDoc(doc(db, "projects", id));
@@ -79,12 +120,17 @@ async function loadProjectData(id) {
             document.getElementById('projectType').value = project.type;
             document.getElementById('projectYear').value = project.year;
             document.getElementById('projectOwner').value = project.owner || '';
+            document.getElementById('toolInput').value = '';
+            selectedTools = project.tools || [];
+            updateToolTags();
 
             // Show current thumbnail if exists
             if (project.thumbnail) {
                 const preview = document.createElement('img');
                 preview.src = project.thumbnail;
                 preview.classList.add('thumbnail-preview');
+                preview.style.border = '1px solid #eff0f2';
+                preview.style.borderRadius = '0.5rem';
                 preview.style.maxWidth = '100%';
                 preview.style.marginTop = '1.5rem';
                 preview.style.marginBottom = '1rem';
@@ -99,6 +145,29 @@ async function loadProjectData(id) {
     }
 }
 
+document.getElementById('toolInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const tool = this.value.trim();
+        if (tool && !selectedTools.includes(tool)) {
+            selectedTools.push(tool);
+            toolsPool.add(tool);
+            updateToolsList();
+            updateToolTags();
+            this.value = '';
+        }
+    }
+});
+
+document.getElementById('toolInput').addEventListener('change', function () {
+    const tool = this.value.trim();
+    if (tool && !selectedTools.includes(tool)) {
+        selectedTools.push(tool);
+        updateToolTags();
+        this.value = '';
+    }
+});
+
 // Handle project form submission
 projectForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -109,7 +178,8 @@ projectForm.addEventListener('submit', async (e) => {
             name: document.getElementById('projectName').value,
             type: document.getElementById('projectType').value,
             year: document.getElementById('projectYear').value,
-            owner: document.getElementById('projectOwner').value
+            owner: document.getElementById('projectOwner').value,
+            tools: selectedTools,
         };
 
         const thumbnailFile = document.getElementById('projectThumbnail').files[0];
@@ -208,10 +278,11 @@ document.getElementById('projectThumbnail').addEventListener('change', function 
 document.getElementById('projectModal').addEventListener('hidden.bs.modal', function () {
     projectForm.reset();
     document.getElementById('projectId').value = '';
+    selectedTools = [];
+    updateToolTags();
     const preview = document.querySelector('.thumbnail-preview');
     if (preview) preview.remove();
 });
-
 // Sign out
 document.getElementById('signOutBtn').addEventListener('click', () => {
     signOut(auth)
