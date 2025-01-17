@@ -1,4 +1,7 @@
 .header {
+    position: sticky;
+    top: 0;
+    background-color: rgb(var(--background));
     display: flex;
     flex-direction: column;
     gap: 0.7rem;

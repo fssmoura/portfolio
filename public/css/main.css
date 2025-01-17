@@ -58,6 +58,7 @@ h6 {
     width: 100vw;
     height: fit-content;
     padding: 0 2.5rem 1rem;
+    background-color: rgb(var(--background));
 }
 
 .footer-container {
