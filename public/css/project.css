@@ -3,7 +3,7 @@
     flex-wrap: wrap;
     justify-content: start;
     width: 100vw;
-    padding: 2.5rem;
+    padding: 1rem 2.5rem;
     overflow: hidden;
 }
 
@@ -65,8 +65,10 @@
 }
 
 .project-content {
+    display: grid;
     height: 100%;
     width: 100%;
+    gap: 1rem;
     overflow-y: auto;
     padding-bottom: 5vh;
     -ms-overflow-style: none;
@@ -80,6 +82,8 @@
 .project-block {
     display: flex;
     height: fit-content;
+    height: 70vh;
+    border: 1px solid rgb(var(--border));
 }
 
 .project-bookmarks {
