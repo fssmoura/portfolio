@@ -20,7 +20,7 @@
         "destination": "/info.html"
       },
       {
-        "source": "/project",
+        "source": "/project{,/**}",
         "destination": "/project.html"
       },
       {

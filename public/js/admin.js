@@ -1,6 +1,6 @@
 import { auth, db, storage } from '/js/firebase.js';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { collection, setDoc, getDocs, deleteDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
 // Constants
@@ -13,6 +13,31 @@ const loginForm = document.getElementById('loginForm');
 const adminDashboard = document.getElementById('adminDashboard');
 const projectForm = document.getElementById('projectForm');
 const projectsList = document.getElementById('projectsList');
+
+// Slug generator function
+function createSlug(text) {
+    return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+}
+
+// Generate unique slug
+async function generateUniqueSlug(baseName) {
+    let slug = createSlug(baseName);
+    let counter = 1;
+    let uniqueSlug = slug;
+
+    while (true) {
+        const docSnap = await getDoc(doc(db, "projects", uniqueSlug));
+        if (!docSnap.exists()) {
+            return uniqueSlug;
+        }
+        uniqueSlug = `${slug}-${counter}`;
+        counter++;
+    }
+}
 
 // Authentication
 loginForm.addEventListener('submit', async (e) => {
@@ -171,11 +196,16 @@ document.getElementById('toolInput').addEventListener('change', function () {
 // Handle project form submission
 projectForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const projectId = document.getElementById('projectId').value;
 
     try {
+        const projectId = document.getElementById('projectId').value;
+        const projectName = document.getElementById('projectName').value;
+
+        // Debug log
+        console.log('Starting project creation...');
+
         const projectData = {
-            name: document.getElementById('projectName').value,
+            name: projectName,
             type: document.getElementById('projectType').value,
             year: document.getElementById('projectYear').value,
             owner: document.getElementById('projectOwner').value,
@@ -184,41 +214,59 @@ projectForm.addEventListener('submit', async (e) => {
 
         const thumbnailFile = document.getElementById('projectThumbnail').files[0];
 
-        if (projectId) {
-            // Editing existing project
-            const docSnap = await getDoc(doc(db, "projects", projectId));
-            const currentProject = docSnap.data();
+        if (!projectId) {
+            // New project - generate slug
+            const slug = await generateUniqueSlug(projectName);
+            console.log('Generated slug:', slug);
 
             if (thumbnailFile) {
-                // Delete old image if exists
-                if (currentProject.thumbnailPath) {
-                    await deleteImage(currentProject.thumbnailPath);
-                }
-                // Upload new image
                 const imageData = await uploadImage(thumbnailFile, 'thumbnails');
                 projectData.thumbnail = imageData.url;
                 projectData.thumbnailPath = imageData.path;
-            } else {
-                // Keep existing image
-                projectData.thumbnail = currentProject.thumbnail;
-                projectData.thumbnailPath = currentProject.thumbnailPath;
             }
 
-            await updateDoc(doc(db, "projects", projectId), projectData);
+            // Create new document with slug
+            await setDoc(doc(db, "projects", slug), projectData);
+            console.log('Created project with slug:', slug);
+
+            // Close modal properly
+            const modalElement = document.getElementById('projectModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            modalElement.addEventListener('hidden.bs.modal', () => {
+                document.body.classList.remove('modal-open');
+                document.querySelector('.modal-backdrop').remove();
+            }, { once: true });
+            modalInstance.hide();
+
+            // Reset form and update UI
+            projectForm.reset();
+            selectedTools = [];
+            updateToolTags();
+            await loadProjects();
+
         } else {
-            // Creating new project
+            // Generate slug for new project
+            const slug = await generateUniqueSlug(projectName);
+            console.log('Generated slug:', slug); // Debug log
+
             if (thumbnailFile) {
                 const imageData = await uploadImage(thumbnailFile, 'thumbnails');
                 projectData.thumbnail = imageData.url;
                 projectData.thumbnailPath = imageData.path;
             }
-            await addDoc(collection(db, "projects"), projectData);
+
+            // Create new document with slug as ID
+            const projectRef = doc(db, "projects", slug);
+            await setDoc(projectRef, projectData);
         }
 
         bootstrap.Modal.getInstance(document.getElementById('projectModal')).hide();
         loadProjects();
         projectForm.reset();
+        selectedTools = [];
+        updateToolTags();
     } catch (error) {
+        console.error('Error in form submission:', error);
         alert('Error saving project: ' + error.message);
     }
 });
@@ -283,6 +331,7 @@ document.getElementById('projectModal').addEventListener('hidden.bs.modal', func
     const preview = document.querySelector('.thumbnail-preview');
     if (preview) preview.remove();
 });
+
 // Sign out
 document.getElementById('signOutBtn').addEventListener('click', () => {
     signOut(auth)
