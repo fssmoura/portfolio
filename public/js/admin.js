@@ -7,6 +7,8 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gsta
 const ADMIN_EMAIL = 'fssmoura.fm@gmail.com';
 let selectedTools = [];
 let toolsPool = new Set();
+let selectedTags = [];
+let tagsPool = new Set();
 
 // DOM Elements
 const loginForm = document.getElementById('loginForm');
@@ -62,6 +64,7 @@ onAuthStateChanged(auth, (user) => {
         adminDashboard.classList.remove('d-none');
         loadProjects();
         loadToolsPool();
+        loadTagsPool();
     } else {
         if (user && user.email !== ADMIN_EMAIL) {
             alert('Unauthorized access. Only admin can access this page.');
@@ -135,6 +138,36 @@ document.getElementById('toolTags').addEventListener('click', (e) => {
     }
 });
 
+async function loadTagsPool() {
+    const querySnapshot = await getDocs(collection(db, "projects"));
+    querySnapshot.forEach((doc) => {
+        const project = doc.data();
+        if (project.tags) {
+            project.tags.forEach(tag => tagsPool.add(tag));
+        }
+    });
+    updateTagsList();
+}
+
+function updateTagsList() {
+    const datalist = document.getElementById('tagsList');
+    datalist.innerHTML = Array.from(tagsPool)
+        .sort((a, b) => a.localeCompare(b))
+        .map(tag => `<option value="${tag}">`)
+        .join('');
+}
+
+function updateTagsDisplay() {
+    const tagsContainer = document.getElementById('projectTags');
+    tagsContainer.innerHTML = selectedTags
+        .map(tag => `
+            <span class="tool-tag">
+                ${tag}
+                <button type="button" class="remove-tag" data-tag="${tag}">&times;</button>
+            </span>
+        `).join('');
+}
+
 async function loadProjectData(id) {
     try {
         const docSnap = await getDoc(doc(db, "projects", id));
@@ -148,6 +181,8 @@ async function loadProjectData(id) {
             document.getElementById('toolInput').value = '';
             selectedTools = project.tools || [];
             updateToolTags();
+            selectedTags = project.tags || [];
+            updateTagsDisplay();
 
             // Show current thumbnail if exists
             if (project.thumbnail) {
@@ -193,6 +228,37 @@ document.getElementById('toolInput').addEventListener('change', function () {
     }
 });
 
+document.getElementById('projectTags').addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-tag')) {
+        const tag = e.target.dataset.tag;
+        selectedTags = selectedTags.filter(t => t !== tag);
+        updateTagsDisplay();
+    }
+});
+
+document.getElementById('tagInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const tag = this.value.trim();
+        if (tag && !selectedTags.includes(tag)) {
+            selectedTags.push(tag);
+            tagsPool.add(tag);
+            updateTagsList();
+            updateTagsDisplay();
+            this.value = '';
+        }
+    }
+});
+
+document.getElementById('tagInput').addEventListener('change', function () {
+    const tag = this.value.trim();
+    if (tag && !selectedTags.includes(tag)) {
+        selectedTags.push(tag);
+        updateTagsDisplay();
+        this.value = '';
+    }
+});
+
 // Handle project form submission
 projectForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -201,23 +267,20 @@ projectForm.addEventListener('submit', async (e) => {
         const projectId = document.getElementById('projectId').value;
         const projectName = document.getElementById('projectName').value;
 
-        // Debug log
-        console.log('Starting project creation...');
-
         const projectData = {
             name: projectName,
             type: document.getElementById('projectType').value,
             year: document.getElementById('projectYear').value,
             owner: document.getElementById('projectOwner').value,
             tools: selectedTools,
+            tags: selectedTags,
         };
 
         const thumbnailFile = document.getElementById('projectThumbnail').files[0];
 
         if (!projectId) {
-            // New project - generate slug
+            // New project
             const slug = await generateUniqueSlug(projectName);
-            console.log('Generated slug:', slug);
 
             if (thumbnailFile) {
                 const imageData = await uploadImage(thumbnailFile, 'thumbnails');
@@ -225,46 +288,27 @@ projectForm.addEventListener('submit', async (e) => {
                 projectData.thumbnailPath = imageData.path;
             }
 
-            // Create new document with slug
             await setDoc(doc(db, "projects", slug), projectData);
-            console.log('Created project with slug:', slug);
-
-            // Close modal properly
-            const modalElement = document.getElementById('projectModal');
-            const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            modalElement.addEventListener('hidden.bs.modal', () => {
-                document.body.classList.remove('modal-open');
-                document.querySelector('.modal-backdrop').remove();
-            }, { once: true });
-            modalInstance.hide();
-
-            // Reset form and update UI
-            projectForm.reset();
-            selectedTools = [];
-            updateToolTags();
-            await loadProjects();
-
         } else {
-            // Generate slug for new project
-            const slug = await generateUniqueSlug(projectName);
-            console.log('Generated slug:', slug); // Debug log
-
+            // Update existing project
             if (thumbnailFile) {
                 const imageData = await uploadImage(thumbnailFile, 'thumbnails');
                 projectData.thumbnail = imageData.url;
                 projectData.thumbnailPath = imageData.path;
             }
 
-            // Create new document with slug as ID
-            const projectRef = doc(db, "projects", slug);
-            await setDoc(projectRef, projectData);
+            await updateDoc(doc(db, "projects", projectId), projectData);
         }
 
+        // Reset form and UI
         bootstrap.Modal.getInstance(document.getElementById('projectModal')).hide();
-        loadProjects();
         projectForm.reset();
         selectedTools = [];
+        selectedTags = [];
         updateToolTags();
+        updateTagsDisplay();
+        await loadProjects();
+
     } catch (error) {
         console.error('Error in form submission:', error);
         alert('Error saving project: ' + error.message);
@@ -327,7 +371,9 @@ document.getElementById('projectModal').addEventListener('hidden.bs.modal', func
     projectForm.reset();
     document.getElementById('projectId').value = '';
     selectedTools = [];
+    selectedTags = [];
     updateToolTags();
+    updateTagsDisplay();
     const preview = document.querySelector('.thumbnail-preview');
     if (preview) preview.remove();
 });
