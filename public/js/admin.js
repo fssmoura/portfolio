@@ -15,6 +15,33 @@ const loginForm = document.getElementById('loginForm');
 const adminDashboard = document.getElementById('adminDashboard');
 const projectForm = document.getElementById('projectForm');
 const projectsList = document.getElementById('projectsList');
+const loadingOverlay = document.querySelector('.loading-overlay');
+const toastContainer = document.querySelector('.toast-container');
+
+// Utility Functions
+function showLoading() {
+    loadingOverlay.style.display = 'flex';
+}
+
+function hideLoading() {
+    loadingOverlay.style.display = 'none';
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-white bg-${type} border-0`;
+    toast.setAttribute('role', 'alert');
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    `;
+    toastContainer.appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    toast.addEventListener('hidden.bs.toast', () => toast.remove());
+}
 
 // Slug generator function
 function createSlug(text) {
@@ -44,16 +71,21 @@ async function generateUniqueSlug(baseName) {
 // Authentication
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    showLoading();
 
     try {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
         if (email !== ADMIN_EMAIL) {
             throw new Error('Unauthorized access. Only admin can access this page.');
         }
         await signInWithEmailAndPassword(auth, email, password);
+        showToast('Login successful!');
     } catch (error) {
-        alert(error.message);
+        showToast(error.message, 'danger');
+    } finally {
+        hideLoading();
     }
 });
 
@@ -67,7 +99,7 @@ onAuthStateChanged(auth, (user) => {
         loadTagsPool();
     } else {
         if (user && user.email !== ADMIN_EMAIL) {
-            alert('Unauthorized access. Only admin can access this page.');
+            showToast('Unauthorized access. Only admin can access this page.', 'danger');
             signOut(auth);
         }
         loginForm.classList.remove('d-none');
@@ -77,6 +109,7 @@ onAuthStateChanged(auth, (user) => {
 
 // Load projects
 async function loadProjects() {
+    showLoading();
     try {
         const querySnapshot = await getDocs(collection(db, "projects"));
         projectsList.innerHTML = '';
@@ -96,7 +129,9 @@ async function loadProjects() {
             projectsList.innerHTML += row;
         });
     } catch (error) {
-        alert('Error loading projects: ' + error.message);
+        showToast('Error loading projects: ' + error.message, 'danger');
+    } finally {
+        hideLoading();
     }
 }
 
@@ -178,9 +213,11 @@ async function loadProjectData(id) {
             document.getElementById('projectType').value = project.type;
             document.getElementById('projectYear').value = project.year;
             document.getElementById('projectOwner').value = project.owner || '';
+            document.getElementById('projectDescription').value = project.description || '';
             document.getElementById('toolInput').value = '';
             selectedTools = project.tools || [];
             updateToolTags();
+            document.getElementById('tagInput').value = '';
             selectedTags = project.tags || [];
             updateTagsDisplay();
 
@@ -262,6 +299,7 @@ document.getElementById('tagInput').addEventListener('change', function () {
 // Handle project form submission
 projectForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    showLoading();
 
     try {
         const projectId = document.getElementById('projectId').value;
@@ -272,6 +310,7 @@ projectForm.addEventListener('submit', async (e) => {
             type: document.getElementById('projectType').value,
             year: document.getElementById('projectYear').value,
             owner: document.getElementById('projectOwner').value,
+            description: document.getElementById('projectDescription').value,
             tools: selectedTools,
             tags: selectedTags,
         };
@@ -289,6 +328,7 @@ projectForm.addEventListener('submit', async (e) => {
             }
 
             await setDoc(doc(db, "projects", slug), projectData);
+            showToast('Project created successfully!');
         } else {
             // Update existing project
             if (thumbnailFile) {
@@ -298,9 +338,9 @@ projectForm.addEventListener('submit', async (e) => {
             }
 
             await updateDoc(doc(db, "projects", projectId), projectData);
+            showToast('Project updated successfully!');
         }
 
-        // Reset form and UI
         bootstrap.Modal.getInstance(document.getElementById('projectModal')).hide();
         projectForm.reset();
         selectedTools = [];
@@ -311,7 +351,9 @@ projectForm.addEventListener('submit', async (e) => {
 
     } catch (error) {
         console.error('Error in form submission:', error);
-        alert('Error saving project: ' + error.message);
+        showToast(error.message, 'danger');
+    } finally {
+        hideLoading();
     }
 });
 
@@ -319,20 +361,23 @@ projectForm.addEventListener('submit', async (e) => {
 projectsList.addEventListener('click', async (e) => {
     if (e.target.classList.contains('delete-project')) {
         if (confirm('Are you sure you want to delete this project?')) {
+            showLoading();
             try {
                 const id = e.target.dataset.id;
                 const docSnap = await getDoc(doc(db, "projects", id));
                 const project = docSnap.data();
 
-                // Delete image if exists
                 if (project.thumbnailPath) {
                     await deleteImage(project.thumbnailPath);
                 }
 
                 await deleteDoc(doc(db, "projects", id));
+                showToast('Project deleted successfully!');
                 loadProjects();
             } catch (error) {
-                alert('Error deleting project: ' + error.message);
+                showToast('Error deleting project: ' + error.message, 'danger');
+            } finally {
+                hideLoading();
             }
         }
     } else if (e.target.classList.contains('edit-project')) {
@@ -380,11 +425,14 @@ document.getElementById('projectModal').addEventListener('hidden.bs.modal', func
 
 // Sign out
 document.getElementById('signOutBtn').addEventListener('click', () => {
+    showLoading();
     signOut(auth)
         .then(() => {
+            showToast('Signed out successfully!');
             window.location.reload();
         })
-        .catch(error => alert('Error signing out: ' + error.message));
+        .catch(error => showToast('Error signing out: ' + error.message, 'danger'))
+        .finally(() => hideLoading());
 });
 
 async function uploadImage(file, path) {
