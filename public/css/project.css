@@ -196,6 +196,12 @@
     text-transform: lowercase;
 }
 
+.project-overview-tag:hover,
+.project-overview-tool:hover {
+    color: rgb(var(--accent));
+    cursor: pointer;
+}
+
 .project-overview-description {
     display: flex;
     justify-content: space-between;
