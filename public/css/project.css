@@ -140,7 +140,6 @@
 /* ---------------------------------- Overview --------------------------------- */
 .project-overview {
     flex-direction: column;
-    gap: 1rem;
 }
 
 .project-overview-section {
@@ -156,7 +155,7 @@
     width: 100%;
     font-size: 5em;
     font-weight: 500;
-    padding: 7rem 15rem 1.5rem;
+    padding: 8rem 15rem 2rem;
     border-bottom: 1px solid rgb(var(--border));
 }
 
@@ -205,7 +204,7 @@
 .project-overview-description {
     display: flex;
     justify-content: space-between;
-    padding: 1.5rem 15rem 40rem;
+    padding: 2.5rem 15rem 50rem;
     border-bottom: 1px solid rgb(var(--border));
 }
 
@@ -216,4 +215,29 @@
     max-width: 65%;
     word-break: keep-all;
     white-space: normal;
+}
+
+.project-overview-thumbnail {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+}
+
+.project-overview-thumbnail-img {
+    position: absolute;
+    bottom: 0;
+    height: fit-content;
+    overflow: hidden;
+    padding: 0 20rem;
+}
+
+.project-overview-thumbnail img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transform: translateY(50%);
+    transition: transform 0.1s ease-out;
+    box-shadow: 0 4px 15rem 5rem rgba(var(--background), 1);
 }

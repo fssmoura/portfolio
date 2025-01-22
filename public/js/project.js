@@ -87,6 +87,19 @@ function handleScroll() {
     if (mostVisible) {
         updateActiveBookmark(mostVisible.id);
     }
+
+    const parallaxImage = document.getElementById('parallaxImage');
+    if (parallaxImage) {
+        const projectContent = document.querySelector('.project-content');
+        const scrollPosition = projectContent.scrollTop;
+        const startTranslate = 50;
+        const endTranslate = 1;
+        const scrollFactor = 0.1;
+
+        const translateY = Math.max(endTranslate, Math.min(startTranslate - (scrollPosition * scrollFactor), startTranslate));
+
+        parallaxImage.style.transform = `translateY(${translateY}%)`;
+    }
 }
 
 function handleBookmarkClick(e) {

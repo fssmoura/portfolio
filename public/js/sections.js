@@ -2,7 +2,7 @@ export const SECTIONS = {
     overview: {
         id: 'overview',
         label: 'Overview',
-        requiredFields: ['name', 'type', 'year', 'description'],
+        requiredFields: ['name', 'type', 'year', 'description', 'thumbnail'],
         template: (content) => `
             <div class="project-block project-overview" id="projectOverview">
                 <div class="project-overview-section">
@@ -30,6 +30,11 @@ export const SECTIONS = {
                 </div>
                 <div class="project-overview-description">
                     <p>${content.description}</p>
+                </div>
+                <div class="project-overview-thumbnail">
+                    <div class="project-overview-thumbnail-img">
+                        <img id="parallaxImage" src="${content.thumbnail}" alt="${content.name} thumbnail">
+                    </div>
                 </div>
             </div>
         `
