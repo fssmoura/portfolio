@@ -47,12 +47,12 @@ export const SECTIONS = {
             if (!content.sections || content.sections.length === 0) return '';
 
             return content.sections.map(section => `
-            <div class="project-block project-section" id="project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}">
-                <div class="project-section-content">
-                    <div class="project-section-title">
-                        <h2>${section.title}</h2>
+            <div class="project-block project-dynamic-section" id="project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}">
+                <div class="project-dynamic-section-content">
+                    <div class="project-dynamic-section-title">
+                        <h2>${section.subtitle}</h2>
                     </div>
-                    <div class="project-section-description">
+                    <div class="project-dynamic-section-description">
                         <p>${section.description}</p>
                     </div>
                 </div>
@@ -63,10 +63,10 @@ export const SECTIONS = {
             if (!content.sections || content.sections.length === 0) return '';
 
             return content.sections.map(section => `
-                <a href="#project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}" class="project-bookmark">
-                    <span class="bookmark-label">${section.title}</span>
-                </a>
-            `).join('');
+            <a href="#project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}" class="project-bookmark">
+                <span class="bookmark-label">${section.title}</span>
+            </a>
+        `).join('');
         }
     }
 };

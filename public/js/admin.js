@@ -244,6 +244,7 @@ async function loadProjectData(id) {
                     sectionsContainer.insertAdjacentHTML('beforeend', createSectionHTML(section.id));
                     const sectionElement = sectionsContainer.lastElementChild;
                     sectionElement.querySelector('.section-title').value = section.title;
+                    sectionElement.querySelector('.section-subtitle').value = section.subtitle;
                     sectionElement.querySelector('.section-description').value = section.description;
                     if (section.id !== 'i') {
                         sectionCounter = Math.max(sectionCounter, parseInt(section.id) + 1);
@@ -324,6 +325,7 @@ projectForm.addEventListener('submit', async (e) => {
         const sections = Array.from(document.querySelectorAll('.section-item')).map(item => ({
             id: item.dataset.sectionId,
             title: item.querySelector('.section-title').value,
+            subtitle: item.querySelector('.section-subtitle').value,
             description: item.querySelector('.section-description').value
         }));
 
@@ -491,7 +493,12 @@ function createSectionHTML(id) {
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <input type="text" class="form-control section-title" placeholder="Section Title" required>
+                    <input type="text" class="form-control section-title" placeholder="Title (bookmark)" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="text" class="form-control section-subtitle" placeholder="Subtitle (display)" required>
                 </div>
             </div>
             <div class="row mb-3">
