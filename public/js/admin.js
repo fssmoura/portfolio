@@ -9,6 +9,7 @@ let selectedTools = [];
 let toolsPool = new Set();
 let selectedTags = [];
 let tagsPool = new Set();
+let sectionCounter = 1;
 
 // DOM Elements
 const loginForm = document.getElementById('loginForm');
@@ -234,6 +235,22 @@ async function loadProjectData(id) {
                 document.getElementById('projectThumbnail').parentElement.appendChild(preview);
             }
 
+            const sectionsContainer = document.getElementById('projectSections');
+            sectionsContainer.innerHTML = '';
+            sectionCounter = 1;
+
+            if (project.sections) {
+                project.sections.forEach(section => {
+                    sectionsContainer.insertAdjacentHTML('beforeend', createSectionHTML(section.id));
+                    const sectionElement = sectionsContainer.lastElementChild;
+                    sectionElement.querySelector('.section-title').value = section.title;
+                    sectionElement.querySelector('.section-description').value = section.description;
+                    if (section.id !== 'i') {
+                        sectionCounter = Math.max(sectionCounter, parseInt(section.id) + 1);
+                    }
+                });
+            }
+
             const modal = new bootstrap.Modal(document.getElementById('projectModal'));
             modal.show();
         }
@@ -304,6 +321,11 @@ projectForm.addEventListener('submit', async (e) => {
     try {
         const projectId = document.getElementById('projectId').value;
         const projectName = document.getElementById('projectName').value;
+        const sections = Array.from(document.querySelectorAll('.section-item')).map(item => ({
+            id: item.dataset.sectionId,
+            title: item.querySelector('.section-title').value,
+            description: item.querySelector('.section-description').value
+        }));
 
         const projectData = {
             name: projectName,
@@ -313,6 +335,7 @@ projectForm.addEventListener('submit', async (e) => {
             description: document.getElementById('projectDescription').value,
             tools: selectedTools,
             tags: selectedTags,
+            sections: sections
         };
 
         const thumbnailFile = document.getElementById('projectThumbnail').files[0];
@@ -421,6 +444,9 @@ document.getElementById('projectModal').addEventListener('hidden.bs.modal', func
     updateTagsDisplay();
     const preview = document.querySelector('.thumbnail-preview');
     if (preview) preview.remove();
+    const sectionsContainer = document.getElementById('projectSections');
+    sectionsContainer.innerHTML = '';
+    sectionCounter = 1;
 });
 
 // Sign out
@@ -450,3 +476,42 @@ async function deleteImage(path) {
         await deleteObject(imageRef);
     }
 }
+
+function createSectionHTML(id) {
+    return `
+        <div class="section-item mb-4 p-3 border border-secondary rounded" data-section-id="${id}">
+            <div class="row mb-2">
+                <div class="col">
+                    <small class="text-muted">ID: ${id}</small>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="text" class="form-control section-title" placeholder="Section Title" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <textarea class="form-control section-description" rows="4" placeholder="Section Description" required></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-outline-danger remove-section">Remove Section</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+document.getElementById('addSectionBtn').addEventListener('click', () => {
+    const sectionsContainer = document.getElementById('projectSections');
+    const id = sectionsContainer.children.length === 0 ? 'i' : sectionCounter++;
+    sectionsContainer.insertAdjacentHTML('beforeend', createSectionHTML(id));
+});
+
+document.getElementById('projectSections').addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-section')) {
+        e.target.closest('.section-item').remove();
+    }
+});
