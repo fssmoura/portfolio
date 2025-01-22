@@ -481,8 +481,12 @@ function createSectionHTML(id) {
     return `
         <div class="section-item mb-4 p-3 border border-secondary rounded" data-section-id="${id}">
             <div class="row mb-2">
-                <div class="col">
+                <div class="col-10">
                     <small class="text-muted">ID: ${id}</small>
+                </div>
+                <div class="col-2 text-end">
+                    <button type="button" class="btn btn-outline-secondary btn-sm move-section-up me-1">↑</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm move-section-down">↓</button>
                 </div>
             </div>
             <div class="row mb-3">
@@ -513,5 +517,21 @@ document.getElementById('addSectionBtn').addEventListener('click', () => {
 document.getElementById('projectSections').addEventListener('click', (e) => {
     if (e.target.classList.contains('remove-section')) {
         e.target.closest('.section-item').remove();
+    }
+});
+
+document.getElementById('projectSections').addEventListener('click', (e) => {
+    if (e.target.classList.contains('move-section-up')) {
+        const currentSection = e.target.closest('.section-item');
+        const previousSection = currentSection.previousElementSibling;
+        if (previousSection) {
+            currentSection.parentNode.insertBefore(currentSection, previousSection);
+        }
+    } else if (e.target.classList.contains('move-section-down')) {
+        const currentSection = e.target.closest('.section-item');
+        const nextSection = currentSection.nextElementSibling;
+        if (nextSection) {
+            currentSection.parentNode.insertBefore(nextSection, currentSection);
+        }
     }
 });
