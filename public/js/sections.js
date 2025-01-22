@@ -38,6 +38,36 @@ export const SECTIONS = {
                 </div>
             </div>
         `
+    },
+    dynamic: {
+        id: 'dynamic',
+        label: 'Dynamic',
+        requiredFields: ['sections'],
+        template: (content) => {
+            if (!content.sections || content.sections.length === 0) return '';
+
+            return content.sections.map(section => `
+            <div class="project-block project-section" id="project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}">
+                <div class="project-section-content">
+                    <div class="project-section-title">
+                        <h2>${section.title}</h2>
+                    </div>
+                    <div class="project-section-description">
+                        <p>${section.description}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        },
+        createBookmarks: (content) => {
+            if (!content.sections || content.sections.length === 0) return '';
+
+            return content.sections.map(section => `
+                <a href="#project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}" class="project-bookmark">
+                    <span class="bookmark-label">${section.title}</span>
+                </a>
+            `).join('');
+        }
     }
 };
 

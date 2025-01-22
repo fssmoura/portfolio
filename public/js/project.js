@@ -18,6 +18,7 @@ async function loadProject() {
         if (docSnap.exists()) {
             const project = docSnap.data();
 
+            // Update project name
             const projectNameElement = document.querySelector('.navbar-project');
             projectNameElement.textContent = project.name;
 
@@ -26,18 +27,22 @@ async function loadProject() {
             contentContainer.innerHTML = '';
             bookmarksContainer.innerHTML = '';
 
-            // Iterate through all sections
-            Object.entries(SECTIONS).forEach(([sectionId, section]) => {
-                if (hasRequiredFields(sectionId, project)) {
-                    contentContainer.innerHTML += section.template(project);
-                    bookmarksContainer.innerHTML += `
-                    <a href="#project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}" class="project-bookmark">
-                        ${sectionId === 'overview' ? '<span class="bookmark-active-icon"></span>' : ''}
-                        <span class="bookmark-label ${sectionId === 'overview' ? 'active' : ''}">${section.label}</span>
+            // Render overview section
+            if (hasRequiredFields('overview', project)) {
+                contentContainer.innerHTML += SECTIONS.overview.template(project);
+                bookmarksContainer.innerHTML += `
+                    <a href="#projectOverview" class="project-bookmark">
+                        <span class="bookmark-active-icon"></span>
+                        <span class="bookmark-label active">Overview</span>
                     </a>
                 `;
-                }
-            });
+            }
+
+            // Render dynamic sections
+            if (hasRequiredFields('dynamic', project)) {
+                contentContainer.innerHTML += SECTIONS.dynamic.template(project);
+                bookmarksContainer.innerHTML += SECTIONS.dynamic.createBookmarks(project);
+            }
 
             initBookmarks();
         }
