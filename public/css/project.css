@@ -22,7 +22,7 @@
 
 .project-section.center {
     flex-direction: column;
-    padding: 1.5rem 0;
+    padding: 0;
     margin: 0 auto;
     height: 80vh;
     width: 80%;
@@ -73,6 +73,9 @@
     padding-bottom: 5vh;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    border-right: 1px solid rgb(var(--border));
+    border-bottom: 1px solid rgb(var(--border));
+    border-left: 1px solid rgb(var(--border));
 }
 
 .project-content::-webkit-scrollbar {
@@ -82,7 +85,6 @@
 .project-block {
     display: flex;
     height: fit-content;
-    border: 1px solid rgb(var(--border));
 }
 
 .project-bookmarks {
@@ -139,7 +141,6 @@
 .project-overview {
     flex-direction: column;
     gap: 1rem;
-    padding: 1.5rem;
 }
 
 .project-overview-section {
@@ -147,37 +148,66 @@
     width: 100%;
     height: fit-content;
     flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    align-items: flex-start;
     color: rgb(var(--accent));
 }
 
-.project-overview-tags {
+.project-overview-title {
+    width: 100%;
+    font-size: 5em;
+    font-weight: 500;
+    padding: 7rem 15rem 1.5rem;
+    border-bottom: 1px solid rgb(var(--border));
+}
+
+.project-overview-underline {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 15rem;
+    border-bottom: 1px solid rgb(var(--border));
+}
+
+.project-overview-underline-section {
     display: flex;
     gap: 0.5rem;
-    margin-top: 0.3rem;
+    font-size: 0.9em;
+    font-weight: 300;
+    padding: 1.5rem 0;
+    color: rgba(var(--accent), 0.6);
 }
 
-.project-overview-tag {
-    padding: 0.3rem 1.2rem;
-    font-size: 14px;
-    font-weight: 300;
+.project-overview-underline-section.subtitle {
+    padding-right: 1.5rem;
+}
+
+.project-overview-underline-section.tags {
+    gap: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border-left: 1px solid rgb(var(--border));
     text-transform: lowercase;
-    border: 1px solid rgb(var(--highlight));
-    background: transparent;
-    border-radius: 3rem;
-    opacity: 1;
 }
 
-.project-overview-title {
-    font-size: 3em;
+.project-overview-underline-section.tools {
+    gap: 1rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid rgb(var(--border));
+    text-transform: lowercase;
+}
+
+.project-overview-description {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem 15rem 40rem;
+    border-bottom: 1px solid rgb(var(--border));
+}
+
+.project-overview-description p {
+    font-size: 1em;
     font-weight: 200;
-}
-
-.project-overview-subtitle {
-    font-size: 0.8em;
-    font-weight: 300;
-    opacity: 0.6;
-    letter-spacing: 0.05rem;
-    text-transform: uppercase;
+    line-height: 1.6;
+    max-width: 65%;
+    word-break: keep-all;
+    white-space: normal;
 }

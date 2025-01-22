@@ -6,29 +6,31 @@ export const SECTIONS = {
         template: (content) => `
             <div class="project-block project-overview" id="projectOverview">
                 <div class="project-overview-section">
-                    <div class="project-overview-subtitle">
-                        ${content.owner ? `${content.owner} — ` : ''}${content.year}
-                    </div>
-                    <span class="project-overview-title">${content.name}</span>
-                    ${content.tags && content.tags.length > 0 ? `
-                            <div class="project-overview-tags">
-                                <span class="project-overview-tag">${content.type}</span>
-                                ${content.tags.map(tag => `<span class="project-overview-tag">${tag}</span>`).join('')}
+                    <h1 class="project-overview-title">${content.name}</h1>
+                    <div class="project-overview-underline">
+                        <div class="project-overview-underline-section subtitle">
+                            ${content.owner ? `${content.owner}, ` : ''}${content.year}
+                        </div>
+                        ${content.tags && content.tags.length > 0 ? `
+                            <div class="project-overview-underline-section tags">
+                                <span class="project-overview-tag">${content.type}</span>${content.tags.length > 0 ? ' · ' : ''}
+                                ${content.tags.sort().map((tag, index) =>
+            `<span class="project-overview-tag">${tag}</span>${index < content.tags.length - 1 ? ' · ' : ''}`
+        ).join('')}
                             </div>
                         ` : ''}
+                        ${content.tools && content.tools.length > 0 ? `
+                            <div class="project-overview-underline-section tools">
+                                ${content.tools.sort().map((tool, index) =>
+            `<span class="project-overview-tool">${tool}</span>${index < content.tools.length - 1 ? ' · ' : ''}`
+        ).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
                 </div>
-
-                <div class="project-description">
+                <div class="project-overview-description">
                     <p>${content.description}</p>
                 </div>
-                ${content.tools && content.tools.length > 0 ? `
-                    <div class="project-tools">
-                        <h3>Tools</h3>
-                        <div class="tools-list">
-                            ${content.tools.map(tool => `<span class="tool">${tool}</span>`).join('')}
-                        </div>
-                    </div>
-                ` : ''}
             </div>
         `
     }
