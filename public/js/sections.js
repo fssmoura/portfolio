@@ -48,13 +48,15 @@ export const SECTIONS = {
 
             return content.sections.map(section => `
             <div class="project-block project-dynamic-section" id="project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}">
-                <div class="project-dynamic-section-content">
-                    <div class="project-dynamic-section-title">
-                        <h2>${section.subtitle}</h2>
-                    </div>
-                    <div class="project-dynamic-section-description">
-                        <p>${section.description}</p>
-                    </div>
+                <div class="quadrant top-left">
+                    <h3 class="project-dynamic-id">${section.id}</h3>
+                </div>
+                <div class="quadrant top-right">
+                    <h3 class="project-dynamic-title">${section.subtitle}</h3>
+                </div>
+                <div class="quadrant bottom-left"></div>
+                <div class="quadrant bottom-right">
+                    <p class="project-dynamic-description">${section.description}</p>
                 </div>
             </div>
         `).join('');

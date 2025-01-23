@@ -68,7 +68,6 @@
     display: grid;
     height: 100%;
     width: 100%;
-    gap: 1rem;
     overflow-y: auto;
     padding-bottom: 5vh;
     -ms-overflow-style: none;
@@ -211,7 +210,7 @@
 .project-overview-description p {
     font-size: 1em;
     font-weight: 200;
-    line-height: 1.6;
+    line-height: 2;
     max-width: 65%;
     word-break: keep-all;
     white-space: normal;
@@ -240,4 +239,65 @@
     transform: translateY(50%);
     transition: transform 0.1s ease-out;
     box-shadow: 0 4px 15rem 5rem rgba(var(--background), 1);
+}
+
+/* ---------------------------------- Dynamic Section --------------------------------- */
+.project-dynamic-section {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-top: 15rem;
+    border-bottom: 1px solid rgb(var(--border));
+}
+
+.project-dynamic-section .quadrant {
+    display: flex;
+}
+
+.project-dynamic-section .top-left,
+.project-dynamic-section .bottom-left {
+    width: 20rem;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    border-right: 1px solid rgb(var(--border));
+}
+
+.project-dynamic-section .top-right,
+.project-dynamic-section .bottom-right {
+    width: calc(100% - 20rem);
+    justify-content: flex-start;
+    padding-right: 15rem;
+    padding-left: 1rem;
+}
+
+.project-dynamic-section .top-left,
+.project-dynamic-section .top-right {
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 1px solid rgb(var(--border));
+    border-bottom: 1px solid rgb(var(--border));
+}
+
+.project-dynamic-section .bottom-left,
+.project-dynamic-section .bottom-right {
+    padding-top: 1rem;
+    padding-bottom: 15rem;
+}
+
+.project-dynamic-id,
+.project-dynamic-title {
+    font-size: 1.1em;
+    font-weight: 300;
+    color: rgba(var(--accent), 0.6);
+}
+
+.project-dynamic-description {
+    font-size: 1em;
+    font-weight: 200;
+    line-height: 2;
+    max-width: 70%;
+    color: rgb(var(--accent));
+    word-break: keep-all;
+    white-space: normal;
 }
