@@ -117,16 +117,17 @@ async function loadProjects() {
         querySnapshot.forEach((doc) => {
             const project = doc.data();
             const row = `
-                <tr>
-                    <td>${project.name}</td>
-                    <td>${project.type}</td>
-                    <td>${project.year}</td>
-                    <td>
-                        <button class="btn btn-sm btn-primary edit-project" data-id="${doc.id}">Edit</button>
-                        <button class="btn btn-sm btn-danger delete-project" data-id="${doc.id}">Delete</button>
-                    </td>
-                </tr>
-            `;
+            <tr>
+                <td>${project.name}</td>
+                <td>${project.type}</td>
+                <td>${project.year}</td>
+                <td>${project.visible === false ? 'No' : 'Yes'}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary edit-project" data-id="${doc.id}">Edit</button>
+                    <button class="btn btn-sm btn-danger delete-project" data-id="${doc.id}">Delete</button>
+                </td>
+            </tr>
+        `;
             projectsList.innerHTML += row;
         });
     } catch (error) {
@@ -221,6 +222,7 @@ async function loadProjectData(id) {
             document.getElementById('tagInput').value = '';
             selectedTags = project.tags || [];
             updateTagsDisplay();
+            document.getElementById('projectVisible').value = project.visible === false ? 'false' : 'true';
 
             // Show current thumbnail if exists
             if (project.thumbnail) {
@@ -337,7 +339,8 @@ projectForm.addEventListener('submit', async (e) => {
             description: document.getElementById('projectDescription').value,
             tools: selectedTools,
             tags: selectedTags,
-            sections: sections
+            sections: sections,
+            visible: document.getElementById('projectVisible').value === 'true'
         };
 
         const thumbnailFile = document.getElementById('projectThumbnail').files[0];

@@ -203,7 +203,7 @@
 .project-overview-description {
     display: flex;
     justify-content: space-between;
-    padding: 2.5rem 15rem 50rem;
+    padding: 2.5rem 15rem 45rem;
     border-bottom: 1px solid rgb(var(--border));
 }
 

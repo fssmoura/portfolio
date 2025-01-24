@@ -18,6 +18,11 @@ async function loadProject() {
         if (docSnap.exists()) {
             const project = docSnap.data();
 
+            if (project.visible === false) {
+                window.location.href = '/404';
+                return;
+            }
+
             // Update project name
             const projectNameElement = document.querySelector('.navbar-project');
             projectNameElement.textContent = project.name;

@@ -9,10 +9,13 @@ export async function initShowcaseDisplay() {
         const projects = [];
 
         querySnapshot.forEach((doc) => {
-            projects.push({
-                id: doc.id,
-                data: doc.data()
-            });
+            const projectData = doc.data();
+            if (projectData.visible !== false) {
+                projects.push({
+                    id: doc.id,
+                    data: projectData
+                });
+            }
         });
 
         projects

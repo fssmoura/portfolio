@@ -51,6 +51,7 @@
                             <th>Name</th>
                             <th>Type</th>
                             <th>Year</th>
+                            <th>Visible?</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -69,55 +70,69 @@
                         <div class="modal-body">
                             <form id="projectForm">
                                 <input type="hidden" id="projectId">
-                                <div class="row mb-3">
-                                    <div class="col-md-5">
-                                        <label class="form-label">Project Name</label>
-                                        <input type="text" class="form-control" id="projectName" required>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <label class="form-label">Year</label>
-                                        <input type="number" class="form-control" id="projectYear" required>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Type</label>
-                                        <input type="text" class="form-control" id="projectType" required>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Owner</label>
-                                        <input type="text" class="form-control" id="projectOwner">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <div class="col-6">
-                                        <label class="form-label">Description</label>
-                                        <textarea class="form-control" id="projectDescription" rows="5"
-                                            required></textarea>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Tools</label>
-                                        <div class="tools-input-container">
-                                            <input type="text" class="form-control" id="toolInput" list="toolsList">
-                                            <datalist id="toolsList"></datalist>
-                                            <div id="toolTags" class="tool-tags mb-2"></div>
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="row mb-3">
+                                            <div class="col-md-11">
+                                                <label class="form-label">Project Name</label>
+                                                <input type="text" class="form-control" id="projectName" required>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label class="form-label">Visible?</label>
+                                                <select class="form-control" id="projectVisible" required>
+                                                    <option value="true">Yes</option>
+                                                    <option value="false">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-2">
+                                                <label class="form-label">Year</label>
+                                                <input type="number" class="form-control" id="projectYear" required>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label class="form-label">Type</label>
+                                                <input type="text" class="form-control" id="projectType" required>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label class="form-label">Owner</label>
+                                                <input type="text" class="form-control" id="projectOwner">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-12">
+                                                <label class="form-label">Description</label>
+                                                <textarea class="form-control" id="projectDescription" rows="7"
+                                                    required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Tools</label>
+                                                <div class="tools-input-container">
+                                                    <input type="text" class="form-control" id="toolInput"
+                                                        list="toolsList">
+                                                    <datalist id="toolsList"></datalist>
+                                                    <div id="toolTags" class="tool-tags mb-2"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Tags</label>
+                                                <div class="tools-input-container">
+                                                    <input type="text" class="form-control" id="tagInput"
+                                                        list="tagsList">
+                                                    <datalist id="tagsList"></datalist>
+                                                    <div id="projectTags" class="tool-tags mb-2"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Tags</label>
-                                        <div class="tools-input-container">
-                                            <input type="text" class="form-control" id="tagInput" list="tagsList">
-                                            <datalist id="tagsList"></datalist>
-                                            <div id="projectTags" class="tool-tags mb-2"></div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Thumbnail</label>
+                                            <input type="file" class="form-control" id="projectThumbnail"
+                                                accept="image/*">
                                         </div>
-                                    </div>
-                                </div>
-
-                                <hr class="border-secondary">
-                                <h5 class="mt-4 mb-3">Assets</h5>
-                                <div class="row mb-3">
-                                    <div class="col-md-2">
-                                        <label class="form-label">Thumbnail</label>
-                                        <input type="file" class="form-control" id="projectThumbnail" accept="image/*">
                                     </div>
                                 </div>
 
