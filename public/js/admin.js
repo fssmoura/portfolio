@@ -268,6 +268,7 @@ async function loadProjectData(id) {
             const project = docSnap.data();
             document.getElementById('projectId').value = id;
             document.getElementById('projectName').value = project.name;
+            document.getElementById('projectTagline').value = project.tagline || '';
             document.getElementById('projectType').value = project.type;
             document.getElementById('projectYear').value = project.year;
             document.getElementById('projectOwner').value = project.owner || '';
@@ -389,6 +390,7 @@ projectForm.addEventListener('submit', async (e) => {
 
         const projectData = {
             name: projectName,
+            tagline: document.getElementById('projectTagline').value,
             type: document.getElementById('projectType').value,
             year: document.getElementById('projectYear').value,
             owner: document.getElementById('projectOwner').value,
