@@ -23,6 +23,9 @@ async function loadProject() {
                 return;
             }
 
+            // Update page title
+            document.title = `${project.name} | francisco moura.`;
+
             // Update project name
             const projectNameElement = document.querySelector('.navbar-project');
             projectNameElement.textContent = project.name;
