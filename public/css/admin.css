@@ -1,3 +1,21 @@
+.table th[onclick] {
+    cursor: pointer;
+    user-select: none;
+    padding-right: 1.5rem;
+    position: relative;
+}
+
+.table th[onclick]:hover {
+    background-color: #2b3035;
+}
+
+.table th[onclick]:after {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .tool-tags {
     display: flex;
     flex-wrap: wrap;

@@ -10,6 +10,8 @@ let toolsPool = new Set();
 let selectedTags = [];
 let tagsPool = new Set();
 let sectionCounter = 1;
+let currentSort = { field: 'name', direction: 'desc' };
+let projectsData = [];
 
 // DOM Elements
 const loginForm = document.getElementById('loginForm');
@@ -113,23 +115,12 @@ async function loadProjects() {
     showLoading();
     try {
         const querySnapshot = await getDocs(collection(db, "projects"));
-        projectsList.innerHTML = '';
+        projectsData = [];
         querySnapshot.forEach((doc) => {
-            const project = doc.data();
-            const row = `
-            <tr>
-                <td>${project.name}</td>
-                <td>${project.type}</td>
-                <td>${project.year}</td>
-                <td>${project.visible === false ? 'No' : 'Yes'}</td>
-                <td>
-                    <button class="btn btn-sm btn-primary edit-project" data-id="${doc.id}">Edit</button>
-                    <button class="btn btn-sm btn-danger delete-project" data-id="${doc.id}">Delete</button>
-                </td>
-            </tr>
-        `;
-            projectsList.innerHTML += row;
+            projectsData.push({ id: doc.id, ...doc.data() });
         });
+        // Sort by name by default
+        sortProjects('name');
     } catch (error) {
         showToast('Error loading projects: ' + error.message, 'danger');
     } finally {
@@ -147,6 +138,71 @@ async function loadToolsPool() {
     });
     updateToolsList();
 }
+
+function sortProjects(field) {
+    if (currentSort.field === field) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSort.field = field;
+        currentSort.direction = 'asc';
+    }
+
+    projectsData.sort((a, b) => {
+        let compareA = a[field];
+        let compareB = b[field];
+
+        // Handle boolean values for visible field
+        if (field === 'visible') {
+            compareA = Boolean(compareA);
+            compareB = Boolean(compareB);
+        }
+
+        if (compareA < compareB) return currentSort.direction === 'asc' ? -1 : 1;
+        if (compareA > compareB) return currentSort.direction === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    renderProjects();
+}
+
+function renderProjects() {
+    const getSortIndicator = (field) => {
+        if (currentSort.field !== field) return '';
+        return currentSort.direction === 'asc' ? ' ↑' : ' ↓';
+    };
+
+    const tableHeaders = `
+        <tr>
+            <th style="cursor: pointer" onclick="window.sortByName()">Name${getSortIndicator('name')}</th>
+            <th style="cursor: pointer" onclick="window.sortByType()">Type${getSortIndicator('type')}</th>
+            <th style="cursor: pointer" onclick="window.sortByYear()">Year${getSortIndicator('year')}</th>
+            <th style="cursor: pointer" onclick="window.sortByVisible()">Visible?${getSortIndicator('visible')}</th>
+            <th>Actions</th>
+        </tr>
+    `;
+
+    const tableBody = projectsData.map(project => `
+        <tr>
+            <td>${project.name}</td>
+            <td>${project.type}</td>
+            <td>${project.year}</td>
+            <td>${project.visible === false ? 'No' : 'Yes'}</td>
+            <td>
+                <button class="btn btn-sm btn-primary edit-project" data-id="${project.id}">Edit</button>
+                <button class="btn btn-sm btn-danger delete-project" data-id="${project.id}">Delete</button>
+            </td>
+        </tr>
+    `).join('');
+
+    const table = document.querySelector('.table');
+    table.querySelector('thead').innerHTML = tableHeaders;
+    projectsList.innerHTML = tableBody;
+}
+
+window.sortByName = () => sortProjects('name');
+window.sortByType = () => sortProjects('type');
+window.sortByYear = () => sortProjects('year');
+window.sortByVisible = () => sortProjects('visible');
 
 function updateToolsList() {
     const datalist = document.getElementById('toolsList');
