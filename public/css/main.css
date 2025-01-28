@@ -7,18 +7,21 @@
     --light-background: 248, 248, 248;
     --light-border: 235, 235, 235;
     --light-highlight: 231, 231, 231;
+    --light-shadow: 235, 235, 235;
 
     /* Dark theme */
     --dark-accent: 242, 242, 242;
     --dark-background: 18, 18, 18;
     --dark-border: 40, 40, 40;
     --dark-highlight: 69, 69, 69;
+    --dark-shadow: 18, 18, 18;
 
     /* Global */
     --accent: var(--light-accent);
     --background: var(--light-background);
     --border: var(--light-border);
     --highlight: var(--light-highlight);
+    --shadow: var(--light-shadow);
 }
 
 * {

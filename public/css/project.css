@@ -238,7 +238,7 @@
     object-fit: cover;
     transform: translateY(50%);
     transition: transform 0.1s ease-out;
-    box-shadow: 0 4px 15rem 5rem rgba(var(--background), 1);
+    box-shadow: 0 4px 15rem 5rem rgba(var(--shadow), 1);
 }
 
 /* ---------------------------------- Dynamic Section --------------------------------- */

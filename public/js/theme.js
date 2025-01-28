@@ -10,6 +10,7 @@ function applyTheme(isDark) {
     root.style.setProperty('--border', `var(--${theme}-border)`);
     root.style.setProperty('--background', `var(--${theme}-background)`);
     root.style.setProperty('--highlight', `var(--${theme}-highlight)`);
+    root.style.setProperty('--shadow', `var(--${theme}-shadow)`);
 
     // Update toggle states
     const lightToggle = document.getElementById('lightThemeToggle');
