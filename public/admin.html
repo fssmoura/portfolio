@@ -71,11 +71,19 @@
                             <form id="projectForm">
                                 <input type="hidden" id="projectId">
                                 <div class="row">
-                                    <div class="col-md-9">
+                                    <div class="col-md-10">
                                         <div class="row mb-3">
-                                            <div class="col-md-11">
+                                            <div class="col-md-8">
                                                 <label class="form-label">Project Name</label>
                                                 <input type="text" class="form-control" id="projectName" required>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label class="form-label">Year</label>
+                                                <input type="number" class="form-control" id="projectYear" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label">Owner</label>
+                                                <input type="text" class="form-control" id="projectOwner">
                                             </div>
                                             <div class="col-md-1">
                                                 <label class="form-label">Visible?</label>
@@ -86,48 +94,38 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <div class="col-md-2">
-                                                <label class="form-label">Year</label>
-                                                <input type="number" class="form-control" id="projectYear" required>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <label class="form-label">Type</label>
-                                                <input type="text" class="form-control" id="projectType" required>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <label class="form-label">Owner</label>
-                                                <input type="text" class="form-control" id="projectOwner">
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <div class="col-12">
                                                 <label class="form-label">Description</label>
-                                                <textarea class="form-control" id="projectDescription" rows="7"
+                                                <textarea class="form-control" id="projectDescription" rows="5"
                                                     required></textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Type</label>
+                                                <input type="text" class="form-control" id="projectType" required>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <label class="form-label">Tools</label>
                                                 <div class="tools-input-container">
                                                     <input type="text" class="form-control" id="toolInput"
-                                                        list="toolsList">
+                                                        placeholder="Select a tool" list="toolsList">
                                                     <datalist id="toolsList"></datalist>
                                                     <div id="toolTags" class="tool-tags mb-2"></div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label class="form-label">Tags</label>
                                                 <div class="tools-input-container">
                                                     <input type="text" class="form-control" id="tagInput"
-                                                        list="tagsList">
+                                                        placeholder="Choose a tag" list="tagsList">
                                                     <datalist id="tagsList"></datalist>
                                                     <div id="projectTags" class="tool-tags mb-2"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="mb-3">
                                             <label class="form-label">Thumbnail</label>
                                             <input type="file" class="form-control" id="projectThumbnail"
@@ -143,7 +141,7 @@
                                     Section</button>
 
 
-                                <hr class="border-secondary">
+                                <hr class="border-secondary" style="margin-top: 2rem;">
                                 <div class="row w-100 mb-2">
                                     <div class="col-12 text-end">
                                         <button type="submit" class="btn btn-primary">Save Project</button>

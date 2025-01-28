@@ -485,23 +485,18 @@ async function deleteImage(path) {
 function createSectionHTML(id) {
     return `
         <div class="section-item mb-4 p-3 border border-secondary rounded" data-section-id="${id}">
-            <div class="row mb-2">
-                <div class="col-10">
-                    <small class="text-muted">ID: ${id}</small>
-                </div>
-                <div class="col-2 text-end">
-                    <button type="button" class="btn btn-outline-secondary btn-sm move-section-up me-1">↑</button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm move-section-down">↓</button>
-                </div>
-            </div>
             <div class="row mb-3">
-                <div class="col">
-                    <input type="text" class="form-control section-title" placeholder="Title (bookmark)" required>
+                <div class="col-auto">
+                    <label class="form-label">ID</label>
+                    <input type="text" class="form-control" value="${id}" readonly style="width: 2.5rem;">
                 </div>
-            </div>
-            <div class="row mb-3">
+                <div class="col-2">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-control section-title" required>
+                </div>
                 <div class="col">
-                    <input type="text" class="form-control section-subtitle" placeholder="Subtitle (display)" required>
+                    <label class="form-label">Subtitle</label>
+                    <input type="text" class="form-control section-subtitle" required>
                 </div>
             </div>
             <div class="row mb-3">
@@ -510,7 +505,11 @@ function createSectionHTML(id) {
                 </div>
             </div>
             <div class="row">
-                <div class="col">
+                <div class="col d-flex justify-content-between">
+                    <div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm move-section-up me-1">↑</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm move-section-down">↓</button>
+                    </div>
                     <button type="button" class="btn btn-outline-danger remove-section">Remove Section</button>
                 </div>
             </div>
