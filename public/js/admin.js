@@ -188,6 +188,7 @@ function renderProjects() {
             <td>${project.year}</td>
             <td>${project.visible === false ? 'No' : 'Yes'}</td>
             <td>
+                <a href="/project?id=${project.id}" class="btn btn-sm btn-secondary">View</a>
                 <button class="btn btn-sm btn-primary edit-project" data-id="${project.id}">Edit</button>
                 <button class="btn btn-sm btn-danger delete-project" data-id="${project.id}">Delete</button>
             </td>
