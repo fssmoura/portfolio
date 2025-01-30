@@ -10,5 +10,11 @@ service firebase.storage {
       allow read: if true;
       allow write, delete: if isAdmin();
     }
+    
+    // Add new rule for section attachments
+    match /section-attachments/{fileName} {
+      allow read: if true;
+      allow write, delete: if isAdmin();
+    }
   }
 }

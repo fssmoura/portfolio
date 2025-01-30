@@ -301,11 +301,29 @@ async function loadProjectData(id) {
 
             if (project.sections) {
                 project.sections.forEach(section => {
-                    sectionsContainer.insertAdjacentHTML('beforeend', createSectionHTML(section.id));
+                    sectionsContainer.insertAdjacentHTML('beforeend',
+                        createSectionHTML(section.id, {
+                            attachmentType: section.attachmentType,
+                            attachmentPath: section.attachmentPath,
+                            attachmentUrl: section.attachmentUrl
+                        })
+                    );
                     const sectionElement = sectionsContainer.lastElementChild;
                     sectionElement.querySelector('.section-title').value = section.title;
                     sectionElement.querySelector('.section-subtitle').value = section.subtitle;
                     sectionElement.querySelector('.section-description').value = section.description;
+
+                    // Handle attachment type
+                    const attachmentType = sectionElement.querySelector('.section-attachment-type');
+                    const attachmentInput = sectionElement.querySelector('.section-attachment-input');
+
+                    if (section.attachmentType) {
+                        attachmentType.value = section.attachmentType;
+                        if (section.attachmentType !== 'none') {
+                            attachmentInput.style.display = 'block';
+                        }
+                    }
+
                     if (section.id !== 'i') {
                         sectionCounter = Math.max(sectionCounter, parseInt(section.id) + 1);
                     }
@@ -381,16 +399,21 @@ projectForm.addEventListener('submit', async (e) => {
 
     try {
         const projectId = document.getElementById('projectId').value;
-        const projectName = document.getElementById('projectName').value;
-        const sections = Array.from(document.querySelectorAll('.section-item')).map(item => ({
+        const oldProject = projectId ?
+            (await getDoc(doc(db, "projects", projectId))).data() : null;
+
+        const rawSections = Array.from(document.querySelectorAll('.section-item')).map(item => ({
             id: item.dataset.sectionId,
             title: item.querySelector('.section-title').value,
             subtitle: item.querySelector('.section-subtitle').value,
-            description: item.querySelector('.section-description').value
+            description: item.querySelector('.section-description').value,
+            attachmentType: item.querySelector('.section-attachment-type').value
         }));
 
+        const processedSections = await handleSectionAttachments(rawSections, oldProject);
+
         const projectData = {
-            name: projectName,
+            name: document.getElementById('projectName').value,
             tagline: document.getElementById('projectTagline').value,
             type: document.getElementById('projectType').value,
             year: document.getElementById('projectYear').value,
@@ -398,7 +421,7 @@ projectForm.addEventListener('submit', async (e) => {
             description: document.getElementById('projectDescription').value,
             tools: selectedTools,
             tags: selectedTags,
-            sections: sections,
+            sections: processedSections,
             visible: document.getElementById('projectVisible').value === 'true'
         };
 
@@ -406,7 +429,7 @@ projectForm.addEventListener('submit', async (e) => {
 
         if (!projectId) {
             // New project
-            const slug = await generateUniqueSlug(projectName);
+            const slug = await generateUniqueSlug(projectData.name);
 
             if (thumbnailFile) {
                 const imageData = await uploadImage(thumbnailFile, 'thumbnails');
@@ -454,8 +477,18 @@ projectsList.addEventListener('click', async (e) => {
                 const docSnap = await getDoc(doc(db, "projects", id));
                 const project = docSnap.data();
 
+                // Delete thumbnail if exists
                 if (project.thumbnailPath) {
                     await deleteImage(project.thumbnailPath);
+                }
+
+                // Delete section attachments if they exist
+                if (project.sections) {
+                    for (const section of project.sections) {
+                        if (section.attachmentPath) {
+                            await deleteImage(section.attachmentPath);
+                        }
+                    }
                 }
 
                 await deleteDoc(doc(db, "projects", id));
@@ -526,7 +559,7 @@ document.getElementById('signOutBtn').addEventListener('click', () => {
 });
 
 async function uploadImage(file, path) {
-    const storageRef = ref(storage, `${path}/${Date.now()}_${file.name}`);
+    const storageRef = ref(storage, `${path}/${file.name}`);
     const snapshot = await uploadBytes(storageRef, file);
     return {
         url: await getDownloadURL(snapshot.ref),
@@ -541,26 +574,52 @@ async function deleteImage(path) {
     }
 }
 
-function createSectionHTML(id) {
+function createSectionHTML(id, existingData = {}) {
     return `
-        <div class="section-item mb-4 p-3 border border-secondary rounded" data-section-id="${id}">
-            <div class="row mb-3">
-                <div class="col-auto">
-                    <label class="form-label">ID</label>
-                    <input type="text" class="form-control" value="${id}" readonly style="width: 2.5rem;">
+        <div class="row section-item mb-4 p-3 border border-secondary rounded" data-section-id="${id}">
+            <div class="col-6">
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <label class="form-label">ID</label>
+                        <input type="text" class="form-control" value="${id}" readonly style="width: 2.5rem;">
+                    </div>
+                    <div class="col-2">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control section-title" required>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Subtitle</label>
+                        <input type="text" class="form-control section-subtitle" required>
+                    </div>
                 </div>
-                <div class="col-2">
-                    <label class="form-label">Title</label>
-                    <input type="text" class="form-control section-title" required>
-                </div>
-                <div class="col">
-                    <label class="form-label">Subtitle</label>
-                    <input type="text" class="form-control section-subtitle" required>
+                <div class="row mb-3">
+                    <div class="col">
+                        <textarea class="form-control section-description" rows="5" placeholder="Section Description" required></textarea>
+                    </div>
                 </div>
             </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <textarea class="form-control section-description" rows="4" placeholder="Section Description" required></textarea>
+            <div class="col-6">
+                <div class="row mb-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="col-2">
+                            <label class="form-label">Attachment Type</label>
+                            <select class="form-control section-attachment-type">
+                                <option value="none" ${existingData.attachmentType === 'none' ? 'selected' : ''}>None</option>
+                                <option value="image" ${existingData.attachmentType === 'image' ? 'selected' : ''}>Image</option>
+                            </select>
+                        </div>
+                        <div class="col-5 section-attachment-input" style="display: ${existingData.attachmentType === 'image' ? 'block' : 'none'}">
+                            <label class="form-label">Upload File</label>
+                            <input type="file" class="form-control section-attachment-file" accept="image/*" 
+                                   data-current-path="${existingData.attachmentPath || ''}">
+                        </div>
+                        <div class="col-5 section-attachment-preview" style="display: ${existingData.attachmentType === 'image' ? 'block' : 'none'}">
+                            <label class="form-label">Preview</label>
+                            ${existingData.attachmentPath ?
+            `<img src="${existingData.attachmentUrl}" class="section-image-preview d-block" style="max-height: 150px; max-width: 200px; border-radius: 0.5rem;">`
+            : '<div class="text-muted">No image uploaded</div>'}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -603,3 +662,106 @@ document.getElementById('projectSections').addEventListener('click', (e) => {
         }
     }
 });
+
+document.getElementById('projectSections').addEventListener('change', (e) => {
+    if (e.target.classList.contains('section-attachment-type')) {
+        const sectionItem = e.target.closest('.section-item');
+        const attachmentInput = sectionItem.querySelector('.section-attachment-input');
+        const attachmentFile = sectionItem.querySelector('.section-attachment-file');
+        const preview = attachmentInput.querySelector('.section-image-preview');
+
+        if (e.target.value === 'none') {
+            attachmentInput.style.display = 'none';
+            attachmentFile.value = '';
+            if (preview) preview.remove();
+        } else {
+            attachmentInput.style.display = 'block';
+        }
+    }
+});
+
+document.getElementById('projectSections').addEventListener('change', async (e) => {
+    if (e.target.classList.contains('section-attachment-file')) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            const sectionItem = e.target.closest('.section-item');
+            const attachmentInput = sectionItem.querySelector('.section-attachment-input');
+
+            // Remove existing preview
+            const existingPreview = attachmentInput.querySelector('.section-image-preview');
+            if (existingPreview) {
+                existingPreview.remove();
+            }
+
+            reader.onload = function (e) {
+                const preview = document.createElement('img');
+                preview.src = e.target.result;
+                preview.classList.add('section-image-preview', 'mt-2');
+                preview.style.maxWidth = '200px';
+                preview.style.borderRadius = '4px';
+                attachmentInput.appendChild(preview);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+});
+
+async function handleSectionAttachments(sections, oldProject = null) {
+    try {
+        const pathsToDelete = new Set();
+        const updatedSections = [];
+
+        // Collect old attachment paths that might need deletion
+        if (oldProject && oldProject.sections) {
+            oldProject.sections.forEach(section => {
+                if (section.attachmentPath) {
+                    pathsToDelete.add(section.attachmentPath);
+                }
+            });
+        }
+
+        // Process each section
+        for (const section of sections) {
+            const newSection = { ...section };
+            const sectionElement = document.querySelector(`[data-section-id="${section.id}"]`);
+            const fileInput = sectionElement.querySelector('.section-attachment-file');
+            const currentPath = fileInput.dataset.currentPath;
+
+            if (section.attachmentType === 'none') {
+                // If changing to none, mark current attachment for deletion
+                if (currentPath) {
+                    pathsToDelete.add(currentPath);
+                }
+                newSection.attachmentPath = null;
+                newSection.attachmentUrl = null;
+            } else if (section.attachmentType === 'image') {
+                if (fileInput.files[0]) {
+                    // New file uploaded
+                    if (currentPath) {
+                        pathsToDelete.add(currentPath);
+                    }
+                    const imageData = await uploadImage(fileInput.files[0], 'section-attachments');
+                    newSection.attachmentPath = imageData.path;
+                    newSection.attachmentUrl = imageData.url;
+                } else if (currentPath) {
+                    // Keep existing file
+                    pathsToDelete.delete(currentPath);
+                    newSection.attachmentPath = currentPath;
+                    newSection.attachmentUrl = await getDownloadURL(ref(storage, currentPath));
+                }
+            }
+            updatedSections.push(newSection);
+        }
+
+        // Delete unused attachments
+        for (const path of pathsToDelete) {
+            await deleteImage(path);
+        }
+
+        return updatedSections;
+    } catch (error) {
+        console.error('Error handling section attachments:', error);
+        throw new Error('Failed to process section attachments');
+    }
+}
