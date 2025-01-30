@@ -131,13 +131,25 @@ function handleBookmarkClick(e) {
             icon.remove();
         });
 
+        // Add transition for smooth parallax reset
+        const parallaxImage = document.getElementById('parallaxImage');
+        if (parallaxImage && targetId === 'projectOverview') {
+            parallaxImage.style.transition = 'transform 0.8s ease-out';
+            parallaxImage.style.transform = 'translateY(50%)';
+        }
+
         targetElement.scrollIntoView({ behavior: 'smooth' });
 
-        // Update active state after scroll animation completes
+        // Update active state and cleanup after scroll animation
         setTimeout(() => {
             updateActiveBookmark(targetId);
             isScrollingProgrammatically = false;
-        }, 1000); // Duration of smooth scroll
+
+            // Remove transition after animation completes
+            if (parallaxImage) {
+                parallaxImage.style.transition = 'transform 0.1s ease-out';
+            }
+        }, 1000);
     }
 }
 
