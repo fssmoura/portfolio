@@ -47,19 +47,25 @@ export const SECTIONS = {
             if (!content.sections || content.sections.length === 0) return '';
 
             return content.sections.map(section => `
-            <div class="project-block project-dynamic-section" id="project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}">
-                <div class="quadrant top-left">
-                    <h3 class="project-dynamic-id">${section.id}</h3>
+                <div class="project-block project-dynamic-section" id="project${section.id.charAt(0).toUpperCase() + section.id.slice(1)}">
+                    <div class="project-dynamic-content">
+                        <div class="quadrant top-left">
+                            <h3 class="project-dynamic-id">${section.id}</h3>
+                        </div>
+                        <div class="quadrant top-right">
+                            <h3 class="project-dynamic-title">${section.subtitle}</h3>
+                        </div>
+                        <div class="quadrant bottom-left"></div>
+                        <div class="quadrant bottom-right">
+                            <p class="project-dynamic-description">${section.description}</p>
+                        </div>
+                    </div>
+                    <div class="project-dynamic-attachment">
+                        ${section.attachmentType && section.attachmentType !== 'none' ?
+                    ATTACHMENTS[section.attachmentType].template(section) : ''}
+                    </div>
                 </div>
-                <div class="quadrant top-right">
-                    <h3 class="project-dynamic-title">${section.subtitle}</h3>
-                </div>
-                <div class="quadrant bottom-left"></div>
-                <div class="quadrant bottom-right">
-                    <p class="project-dynamic-description">${section.description}</p>
-                </div>
-            </div>
-        `).join('');
+            `).join('');
         },
         createBookmarks: (content) => {
             if (!content.sections || content.sections.length === 0) return '';
@@ -72,6 +78,17 @@ export const SECTIONS = {
         }
     }
 };
+
+export const ATTACHMENTS = {
+    image: {
+        template: (content) => `
+            <div class="project-attachment-image">
+                <img src="${content.attachmentUrl}" alt="${content.title}">
+            </div>
+        `
+    }
+};
+
 
 export function hasRequiredFields(section, projectData) {
     return SECTIONS[section].requiredFields.every(field =>

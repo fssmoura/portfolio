@@ -105,9 +105,9 @@ function handleScroll() {
     if (parallaxImage) {
         const projectContent = document.querySelector('.project-content');
         const scrollPosition = projectContent.scrollTop;
-        const startTranslate = 50;
+        const startTranslate = 45;
         const endTranslate = 1;
-        const scrollFactor = 0.07;
+        const scrollFactor = 0.05;
 
         const translateY = Math.max(endTranslate, Math.min(startTranslate - (scrollPosition * scrollFactor), startTranslate));
 

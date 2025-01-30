@@ -84,6 +84,7 @@
 .project-block {
     display: flex;
     height: fit-content;
+    flex-direction: column;
 }
 
 .project-bookmarks {
@@ -236,17 +237,17 @@
     width: 100%;
     height: auto;
     object-fit: cover;
-    transform: translateY(50%);
+    transform: translateY(45%);
     transition: transform 0.1s ease-out;
     box-shadow: 0 4px 15rem 5rem rgba(var(--shadow), 1);
 }
 
 /* ---------------------------------- Dynamic Section --------------------------------- */
-.project-dynamic-section {
+.project-dynamic-content {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    padding-top: 15rem;
+    padding-top: 12rem;
     border-bottom: 1px solid rgb(var(--border));
 }
 
@@ -282,7 +283,7 @@
 .project-dynamic-section .bottom-left,
 .project-dynamic-section .bottom-right {
     padding-top: 1rem;
-    padding-bottom: 15rem;
+    padding-bottom: 12rem;
 }
 
 .project-dynamic-id,
@@ -300,4 +301,23 @@
     color: rgb(var(--accent));
     word-break: keep-all;
     white-space: normal;
+}
+
+/* ---------------------------------- Img Attachment --------------------------------- */
+.project-dynamic-attachment {
+    height: fit-content;
+    border-bottom: 1px solid rgb(var(--border));
+    line-height: 0;
+}
+
+.project-attachment-image {
+    display: block;
+    width: 100%;
+}
+
+.project-attachment-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }

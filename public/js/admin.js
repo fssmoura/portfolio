@@ -608,16 +608,18 @@ function createSectionHTML(id, existingData = {}) {
                                 <option value="image" ${existingData.attachmentType === 'image' ? 'selected' : ''}>Image</option>
                             </select>
                         </div>
-                        <div class="col-5 section-attachment-input" style="display: ${existingData.attachmentType === 'image' ? 'block' : 'none'}">
-                            <label class="form-label">Upload File</label>
+                        <div class="col-4 section-attachment-input" style="display: ${existingData.attachmentType === 'image' ? 'block' : 'none'}">
+                            <label class="form-label">Upload Image</label>
                             <input type="file" class="form-control section-attachment-file" accept="image/*" 
                                    data-current-path="${existingData.attachmentPath || ''}">
                         </div>
-                        <div class="col-5 section-attachment-preview" style="display: ${existingData.attachmentType === 'image' ? 'block' : 'none'}">
+                        <div class="col-4 section-attachment-preview" style="display: ${existingData.attachmentType === 'image' ? 'block' : 'none'}">
                             <label class="form-label">Preview</label>
-                            ${existingData.attachmentPath ?
-            `<img src="${existingData.attachmentUrl}" class="section-image-preview d-block" style="max-height: 150px; max-width: 200px; border-radius: 0.5rem;">`
+                            <div>
+                                ${existingData.attachmentPath ?
+            `<img src="${existingData.attachmentUrl}" class="section-image-preview" style="max-width: 200px; border-radius: 4px;">`
             : '<div class="text-muted">No image uploaded</div>'}
+                            </div>
                         </div>
                     </div>
                 </div>
