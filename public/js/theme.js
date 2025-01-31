@@ -1,5 +1,5 @@
-// Get stored theme or default to false (light theme)
-let isDarkTheme = localStorage.getItem('darkTheme') === 'true';
+// Get stored theme or default to true (dark theme)
+let isDarkTheme = localStorage.getItem('darkTheme') !== 'false';
 
 function applyTheme(isDark) {
     const theme = isDark ? 'dark' : 'light';

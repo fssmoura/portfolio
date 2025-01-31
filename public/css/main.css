@@ -6,7 +6,7 @@
     --light-accent: 34, 34, 34;
     --light-background: 248, 248, 248;
     --light-border: 235, 235, 235;
-    --light-highlight: 231, 231, 231;
+    --light-highlight: 225, 225, 225;
     --light-shadow: 235, 235, 235;
 
     /* Dark theme */
@@ -17,11 +17,11 @@
     --dark-shadow: 18, 18, 18;
 
     /* Global */
-    --accent: var(--light-accent);
-    --background: var(--light-background);
-    --border: var(--light-border);
-    --highlight: var(--light-highlight);
-    --shadow: var(--light-shadow);
+    --accent: var(--dark-accent);
+    --background: var(--dark-background);
+    --border: var(--dark-border);
+    --highlight: var(--dark-highlight);
+    --shadow: var(--dark-shadow);
 }
 
 * {
@@ -55,7 +55,7 @@ h6 {
 }
 
 .footer {
-    position: absolute;
+    position: relative;
     bottom: 0;
     display: flex;
     width: 100vw;
