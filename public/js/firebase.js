@@ -4,12 +4,12 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: import.meta.env.FIREBASE_API_KEY,
-    authDomain: import.meta.env.FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.FIREBASE_APP_ID
+    apiKey: "AIzaSyAyvYAWUuGN5LjD1igZNlQVRNgGIA2sJTU",
+    authDomain: "francisco-moura.firebaseapp.com",
+    projectId: "francisco-moura",
+    storageBucket: "francisco-moura.firebaseapp.com",
+    messagingSenderId: "431069332065",
+    appId: "1:431069332065:web:6c2870fc5324530e60e020"
 };
 
 const app = initializeApp(firebaseConfig);
