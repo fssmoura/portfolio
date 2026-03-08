@@ -13,24 +13,12 @@
 
 [data-theme="dark"] {
     color-scheme: dark;
-    --bg-primary: 18, 18, 18;
-    --bg-secondary: 26, 26, 26;
-    --bg-hover: 36, 36, 36;
-    --border: 48, 48, 48;
+    --bg-primary: 41, 41, 41;
+    --bg-secondary: 33, 33, 33;
+    --bg-hover: 31, 31, 31;
+    --border: 63, 63, 63;
     --text-primary: 245, 242, 237;
-    --text-secondary: 140, 140, 140;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-        color-scheme: dark;
-        --bg-primary: 18, 18, 18;
-        --bg-secondary: 26, 26, 26;
-        --bg-hover: 36, 36, 36;
-        --border: 48, 48, 48;
-        --text-primary: 245, 242, 237;
-        --text-secondary: 140, 140, 140;
-    }
+    --accent: 255, 96, 58;
 }
 
 /* ============ RESET ============ */
