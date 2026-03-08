@@ -1,5 +1,6 @@
 /* ============ COLORS ============ */
 :root {
+    color-scheme: light;
     --bg-primary: 245, 242, 237;
     --bg-secondary: 234, 230, 228;
     --bg-hover: 229, 225, 218;
@@ -11,12 +12,25 @@
 }
 
 [data-theme="dark"] {
+    color-scheme: dark;
     --bg-primary: 18, 18, 18;
     --bg-secondary: 26, 26, 26;
     --bg-hover: 36, 36, 36;
     --border: 48, 48, 48;
     --text-primary: 245, 242, 237;
     --text-secondary: 140, 140, 140;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg-primary: 18, 18, 18;
+        --bg-secondary: 26, 26, 26;
+        --bg-hover: 36, 36, 36;
+        --border: 48, 48, 48;
+        --text-primary: 245, 242, 237;
+        --text-secondary: 140, 140, 140;
+    }
 }
 
 /* ============ RESET ============ */
@@ -29,20 +43,51 @@
 }
 
 /* ============ PAGE ============ */
-html,
+html {
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    scroll-behavior: smooth;
+}
+
 body {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100svh;
     font-family: 'Geist', sans-serif;
     font-weight: 400;
+    font-synthesis: none;
     background: rgb(var(--bg-primary));
     color: rgb(var(--text-primary));
     transition: background-color 250ms ease, color 250ms ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+    }
 }
 
 /* ============ TYPOGRAPHY ============ */
+.text-display,
+.text-large-title,
+.text-title-1,
+.text-title-2,
+.text-title-3,
+.text-headline {
+    text-wrap: balance;
+}
+
+.text-body,
+.text-callout,
+.text-subheadline {
+    text-wrap: pretty;
+}
+
 .text-display {
     font-size: clamp(48px, 8vw, 96px);
     font-weight: 700;
