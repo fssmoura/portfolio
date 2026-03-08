@@ -1,10 +1,125 @@
-* {
-    margin: 0;
-    padding: 0;
+/* ============ COLORS ============ */
+:root {
+    --color-bg-primary: 245, 242, 237;
+    --color-bg-secondary: 234, 230, 228;
+    --color-bg-hover: 229, 225, 218;
+    --color-border: 216, 211, 203;
+    --color-text-primary: 41, 41, 41;
+    --color-text-secondary: 113, 113, 113;
+    --color-accent: 238, 108, 77;
+    --color-accent-hover: 239, 136, 108;
 }
 
+[data-theme="dark"] {
+    --color-bg-primary: 18, 18, 18;
+    --color-bg-secondary: 26, 26, 26;
+    --color-bg-hover: 36, 36, 36;
+    --color-border: 48, 48, 48;
+    --color-text-primary: 245, 242, 237;
+    --color-text-secondary: 140, 140, 140;
+}
+
+/* ============ RESET ============ */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============ PAGE ============ */
 html,
 body {
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
+    font-family: 'Geist', sans-serif;
+    font-weight: 400;
+    background: rgb(var(--color-bg-primary));
+    color: rgb(var(--color-text-primary));
+    transition: background-color 250ms ease, color 250ms ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============ TYPOGRAPHY ============ */
+.text-display {
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 700;
+    line-height: 100%;
+    letter-spacing: -0.02em;
+}
+
+.text-large-title {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 700;
+    line-height: 105%;
+    letter-spacing: -0.015em;
+}
+
+.text-title-1 {
+    font-size: clamp(32px, 4.5vw, 48px);
+    font-weight: 700;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+}
+
+.text-title-2 {
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 600;
+    line-height: 115%;
+    letter-spacing: -0.01em;
+}
+
+.text-title-3 {
+    font-size: clamp(22px, 2.5vw, 28px);
+    font-weight: 600;
+    line-height: 120%;
+    letter-spacing: -0.005em;
+}
+
+.text-headline {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 130%;
+    letter-spacing: -0.005em;
+}
+
+.text-body {
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 160%;
+    letter-spacing: -0.005em;
+}
+
+.text-callout {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 155%;
+}
+
+.text-subheadline {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 150%;
+}
+
+.text-footnote {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 145%;
+}
+
+.text-caption-1 {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 140%;
+}
+
+.text-caption-2 {
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 130%;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
