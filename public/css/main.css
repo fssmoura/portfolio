@@ -1,22 +1,22 @@
 /* ============ COLORS ============ */
 :root {
-    --color-bg-primary: 245, 242, 237;
-    --color-bg-secondary: 234, 230, 228;
-    --color-bg-hover: 229, 225, 218;
-    --color-border: 216, 211, 203;
-    --color-text-primary: 41, 41, 41;
-    --color-text-secondary: 113, 113, 113;
-    --color-accent: 238, 108, 77;
-    --color-accent-hover: 239, 136, 108;
+    --bg-primary: 245, 242, 237;
+    --bg-secondary: 234, 230, 228;
+    --bg-hover: 229, 225, 218;
+    --border: 216, 211, 203;
+    --text-primary: 41, 41, 41;
+    --text-secondary: 113, 113, 113;
+    --accent: 238, 108, 77;
+    --accent-hover: 239, 136, 108;
 }
 
 [data-theme="dark"] {
-    --color-bg-primary: 18, 18, 18;
-    --color-bg-secondary: 26, 26, 26;
-    --color-bg-hover: 36, 36, 36;
-    --color-border: 48, 48, 48;
-    --color-text-primary: 245, 242, 237;
-    --color-text-secondary: 140, 140, 140;
+    --bg-primary: 18, 18, 18;
+    --bg-secondary: 26, 26, 26;
+    --bg-hover: 36, 36, 36;
+    --border: 48, 48, 48;
+    --text-primary: 245, 242, 237;
+    --text-secondary: 140, 140, 140;
 }
 
 /* ============ RESET ============ */
@@ -35,8 +35,8 @@ body {
     min-height: 100vh;
     font-family: 'Geist', sans-serif;
     font-weight: 400;
-    background: rgb(var(--color-bg-primary));
-    color: rgb(var(--color-text-primary));
+    background: rgb(var(--bg-primary));
+    color: rgb(var(--text-primary));
     transition: background-color 250ms ease, color 250ms ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
